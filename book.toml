@@ -1,0 +1,9 @@
+[book]
+authors = ["suzukishimei"]
+language = "ja"
+src = "src"
+title = "Rustによる低レベル制御 — High Performance Rust"
+
+[output.html]
+git-repository-url = "https://github.com/suzukishimei/low-level-control-on-rust"
+edit-url-template = "https://github.com/suzukishimei/low-level-control-on-rust/edit/main/{path}"
