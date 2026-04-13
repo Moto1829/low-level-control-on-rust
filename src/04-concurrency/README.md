@@ -1,6 +1,6 @@
 # 第4章: 並列化
 
-Rustは安全な並列プログラミングを言語レベルで保証します。本章では、低レベルのスレッド操作から高レベルのデータ並列ライブラリ、ロックフリーアルゴリズム、非同期ランタイムのパフォーマンスチューニングまでを体系的に学びます。
+Rustは安全な並列プログラミングを言語レベルで保証します。本章では、低レベルのスレッド操作から高レベルのデータ並列ライブラリ、ロックフリーアルゴリズム、非同期ランタイムのパフォーマンスチューニング、さらに Work-Stealing と NUMA のようなハードウェア寄りの最適化までを体系的に学びます。
 
 ## なぜRustで並列化か
 
@@ -79,6 +79,7 @@ OSスレッド (2〜4個)
 | [03. アトミック操作](./03-atomics.md) | `Atomic*`、メモリオーダリング | ★★★ |
 | [04. ロックフリー](./04-lock-free.md) | `crossbeam`、ABA問題 | ★★★ |
 | [05. 非同期パフォーマンス](./05-async-perf.md) | `tokio`、バックプレッシャー | ★★★ |
+| [06. Work-Stealing と NUMA 対応](./06-work-stealing-numa.md) | `crossbeam-deque`、スケジューラ設計、NUMA局所性 | ★★★ |
 
 ## 学習目標
 
@@ -89,6 +90,7 @@ OSスレッド (2〜4個)
 3. `Ordering` の意味を理解し、正しいアトミック操作を選択できる
 4. `crossbeam` を使ったロックフリーデータ構造を活用できる
 5. `tokio` のスレッドモデルを理解し、ブロッキング処理を適切に扱える
+6. Work-Stealing スケジューラの設計意図を説明でき、NUMA を意識したタスク配置とメモリ配置の基本方針を立てられる
 
 ## 前提知識
 
@@ -103,9 +105,11 @@ OSスレッド (2〜4個)
 [dependencies]
 rayon = "1.10"
 crossbeam = "0.8"
+crossbeam-deque = "0.8"
 dashmap = "6.0"
 tokio = { version = "1", features = ["full"] }
 atomic_float = "1.0"
+hwloc2 = "2.2"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
